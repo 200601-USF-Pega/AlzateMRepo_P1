@@ -3,7 +3,7 @@ package com.revature.onlinestoreapp.dao;
 import com.revature.onlinestoreapp.models.Admin;
 import com.revature.onlinestoreapp.models.Customer;
 import com.revature.onlinestoreapp.models.PaymentInfo;
-import com.revature.onlinestoreapp.service.ConnectionService;
+import com.revature.onlinestoreapp.web.ConnectionService;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -55,8 +55,6 @@ public class UserRepoDB implements IUserRepo {
 
             paymentInfoStatement.executeUpdate();
 
-            // for each loop is possible for adding inventory do this in admin
-            // In video its minute 23 to add items into array variable
 
             return customer;
 
@@ -101,99 +99,30 @@ public class UserRepoDB implements IUserRepo {
         return null;
     }
 
-    @Override
-    public void viewPaymentInfo(int userInput) {
-        try {
-
-            PreparedStatement paymentCheck =
-                    connectionService.getConnection().prepareStatement
-                            ("SELECT * FROM PaymentInfo WHERE customer_id = " +"''" + userInput + "''");
-            //Consider making statement variables for both the admin and the customer
-            //Simply pass those in and now you only need one method
-
-            ResultSet resultSet = paymentCheck.executeQuery();
 
 
-            if (resultSet.next()) {
 
-                //int customer_id = resultSet.getInt("customer_id");
-
-                int paymentId = resultSet.getInt(1);
-                String cardNum = resultSet.getString(2);
-                String securitycode = resultSet.getString(3);
-
-                System.out.println("Card Number: " + cardNum);
-                System.out.println("Security Code: " + securitycode);
-
-
-            } else {
-                System.out.println("Fail");
-            }
-
-        } catch (SQLException e) {
-            //System.out.println("Input does not match");
-
-            e.getMessage();
-        }
-
-
-    }
 
 
     @Override
-    public ArrayList<ArrayList<String>> getUserPaymentInfo() {
-        ArrayList<String> inner;
-        ArrayList<ArrayList<String>> outer = new ArrayList<>();
+    public ArrayList<Customer> getAllCustomers() {
+        ArrayList<Customer> result = new ArrayList<>();
 
         try {
-
 
             PreparedStatement selectAllStatement = connectionService.getConnection().prepareStatement("SELECT * FROM customer");
 
             ResultSet rs = selectAllStatement.executeQuery();
 
             while(rs.next()){
-                inner = new ArrayList<>();
-                for(int i = 1; i <= 4; i++)
-                {
-                    inner.add(rs.getString(i));
-                }
-                outer.add(inner);
+
+                Customer customer = new
+                        Customer(rs.getString("firsname"), rs.getString("lastname"), rs.getString("email"));
+                result.add(customer);
+
             }
 
-            return outer;
-
-
-        }catch (Exception e){
-            e.getMessage();
-        }
-
-        return null;
-
-    }
-
-    @Override
-    public ArrayList<ArrayList<String>> getAllCustomers() {
-
-        ArrayList<String> inner;
-        ArrayList<ArrayList<String>> outer = new ArrayList<>();
-        try {
-
-
-            PreparedStatement selectAllStatement = connectionService.getConnection().prepareStatement("SELECT * FROM customer");
-
-            ResultSet rs = selectAllStatement.executeQuery();
-
-            while(rs.next()){
-                inner = new ArrayList<>();
-                for(int i = 1; i <= 4; i++)
-                {
-                    inner.add(rs.getString(i));
-                }
-                outer.add(inner);
-            }
-
-            return outer;
+            return result;
 
 
         }catch (Exception e){

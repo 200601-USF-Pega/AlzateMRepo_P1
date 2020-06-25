@@ -1,4 +1,4 @@
-package com.revature.onlinestoreapp.service;
+package com.revature.onlinestoreapp.web;
 
 import java.io.FileInputStream;
 import java.sql.*;
@@ -6,15 +6,31 @@ import java.util.Properties;
 
 public class ConnectionService {
 
-    //public Connection connection;
     private static ConnectionService connectionService_single_instance = null;
-    private Connection connection;
+    public static Connection connection;
+
+
+    public static void initialize() {
+        try  {
+            Class.forName("org.postgresql.Driver");
+            connection = DriverManager.getConnection(MyProps.url, MyProps.name, MyProps.password);
+
+        } catch (Exception e) {
+            System.out.println("Exception: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+    }
 
     public Connection getConnection() {
+        if(connection == null){
+            initialize();
 
+        }
         return connection;
     }
 
+    //P0
     public static ConnectionService getInstance(){
 
         if(connectionService_single_instance == null) {
@@ -26,6 +42,7 @@ public class ConnectionService {
 
     }
 
+    //P0
     public ConnectionService() {
         try {
             FileInputStream file = new FileInputStream("connection.prop");

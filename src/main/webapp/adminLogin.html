@@ -9,35 +9,41 @@
     <link rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css">
+    <link rel="stylesheet" href="bootstrap/css/mystyle.css">
 
-
-    <title>Customer Page</title>
+    <title>Admin Login</title>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-    <a href="#" class="navbar-brand">Online Store App</a>
-    <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarMenu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarMenu">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a href="#" class="nav-link">Users</a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">Products</a>
-            </li>
-        </ul>
+<!-- Fist div will have image at the top-->
+<div class = "modal-dialog text-center">
+    <div class="col-sm-9 main-section">
+        <div class="modal-content">
+
+            <div class ="col-12 user-img">
+                <!-- Here we will add some sort of header for the login form-->
+                <br>
+                <h2>Admin Login</h2>
+                <br>
+            </div>
+            <div class="col-12 form-input">
+                <form action="/OnlineStoreApp/service/Login/admin" method="post">
+                    <div class="form-group">
+                        <input type="email" class="form-control" placeholder="Enter Email" id="email" name="email">
+                        <label for="email"></label>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" placeholder="Enter Password" id="password" name="password">
+                        <label for="password"></label>
+                    </div>
+                    <button type="submit" class="btn btn-success">Login</button>
+                </form>
+            </div>
+        </div>
     </div>
-</nav>
-
-<h1>Login Success! In Customer Page</h1>
-
-
+</div>
 
 
 <!-- Optional JavaScript -->

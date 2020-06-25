@@ -8,6 +8,10 @@ public class Admin {
     private String password;
     private String userType = "Admin";
 
+    public Admin() {
+
+    }
+
     public Admin(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;

@@ -1,6 +1,8 @@
 package com.revature.onlinestoreapp.service;
 
+import com.revature.onlinestoreapp.models.Admin;
 import com.revature.onlinestoreapp.models.Customer;
+import com.revature.onlinestoreapp.web.ConnectionService;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,11 +14,7 @@ public class CredentialVerification {
     ValidationService inputValidation = new ValidationService();
     ConnectionService connectionService = new ConnectionService().getInstance();
 
-    // Make the SELECT statement pull both records at the same time
-    // "SELECT * FROM customer WHERE email=? AND password=? ";
-    //Then turn it into One method that passes in that prompt
 
-    //No-args Constructor
     public CredentialVerification() {
 
     }
@@ -115,7 +113,6 @@ public class CredentialVerification {
 
     /**
      *  New login verification for project 1. Gets both email and password at the same time.
-     *  Will be called in the CustomerLoginServlet.java
      * @param customer customer object
      * @return boolean value depending on input
      */
@@ -146,6 +143,43 @@ public class CredentialVerification {
         } catch (SQLException e) {
             return false;
         }
+
+    }
+
+
+    /**
+     *  New login verification for project 1. Gets both email and password at the same time.
+     * @param admin customer object
+     * @return boolean value depending on input
+     */
+    public boolean loginAdmin(Admin admin){
+
+        try {
+
+            PreparedStatement inputCheck =
+                    connectionService.getConnection().prepareStatement
+                            ("SELECT * FROM admin WHERE email=? AND password=?");
+
+            inputCheck.setString(1, admin.getEmail());
+            inputCheck.setString(2, admin.getPassword());
+
+            ResultSet resultSet = inputCheck.executeQuery();
+
+            if (resultSet.next()) {
+
+
+                return true;
+
+            } else {
+
+                System.out.println("Input does not match");
+                return false;
+            }
+
+        } catch (SQLException e) {
+            return false;
+        }
+
 
     }
 

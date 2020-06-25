@@ -1,7 +1,7 @@
 package com.revature.onlinestoreapp.dao;
 
 import com.revature.onlinestoreapp.models.Product;
-import com.revature.onlinestoreapp.service.ConnectionService;
+import com.revature.onlinestoreapp.web.ConnectionService;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

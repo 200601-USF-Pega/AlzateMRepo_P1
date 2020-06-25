@@ -48,6 +48,12 @@ public class Customer implements Serializable {
         this.phoneNum = phoneNum;
     }
 
+    public Customer(String firstName, String lastName, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
+
     public int getCustomerID() {
         return customerID;
     }
