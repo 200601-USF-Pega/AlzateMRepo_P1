@@ -75,6 +75,25 @@
             req.setRequestHeader('Content-Type', 'application/json');
             req.send(JSON.stringify(products));
         }
+
+        function removeProduct(){
+
+            let product = {};
+            product = document.querySelector("#product_id").value;
+
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function() {
+
+                if (this.readyState > 3) {
+
+                    document.querySelector("#product_id").value = "";
+                }
+            }
+
+            req.open("DELETE","http://localhost:8080/OnlineStoreApp/service/products/removeProduct", true);
+            req.setRequestHeader('Content-Type', 'application/json');
+            req.send(JSON.stringify(product));
+        }
     </script>
 </head>
 <body>
@@ -114,14 +133,25 @@
 </table>
 
 <br/> <br/>
-<h3>Add New Product</h3>
 
-<label>
-<input type="text" id="name" placeholder="Enter Product Name"/>
-<input type="number" id="price" placeholder="Enter Price"/>
-<input type="text" id="description" placeholder="Description"/>
-<input type="button" id="inpButton" value="Add Product" onClick="submitProduct()"/>
-</label>
+<div>
+    <h3>Add New Product</h3>
+
+    <label>
+    <input type="text" id="name" placeholder="Enter Product Name"/>
+    <input type="number" id="price" placeholder="Enter Price"/>
+    <input type="text" id="description" placeholder="Description"/>
+    <input type="button" id="inpButton" value="Add Product" onClick="submitProduct()"/>
+    </label>
+</div>
+
+<div>
+    <h3>Delete a Product</h3>
+    <label>
+        <input type="number" id="product_id" placeholder="Enter the Product ID"/>
+        <input type="button" id="inputButton" value="Delete Product" onclick="removeProduct()"/>
+    </label>
+</div>
 
 
 

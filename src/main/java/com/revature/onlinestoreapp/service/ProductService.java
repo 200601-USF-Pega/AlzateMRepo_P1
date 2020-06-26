@@ -32,22 +32,21 @@ public class ProductService {
         return Response.ok().status(201).build();
     }
 
+    @DELETE
+    @Path("/removeProduct")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response removeProduct(int product_id) {
 
-/*
-    @POST
-    @Path("/newproduct")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response addNewProduct(@FormDataParam("name") String name, @FormDataParam("price") double price, @FormDataParam("description") String description) throws URISyntaxException {
-        System.out.println(name + price + description);
-        Product newProduct = new Product(name, price, description);
-        ProductRepoDB productRepoDB = new ProductRepoDB();
-        productRepoDB.addProduct(newProduct);
+        productRepo.removeProduct(product_id);
 
-        return Response.status(401).build();
+        System.out.println("Called productRepo.removeProduct");
+
+        return Response.ok().status(201).build();
 
     }
 
- */
+
+
 
     @GET
     @Path("/all")
