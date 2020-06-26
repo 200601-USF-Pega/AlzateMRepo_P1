@@ -178,9 +178,8 @@ public class ProductRepoDB implements IProductRepo {
     }
 
     @Override
-    public ArrayList<ArrayList<String>> getAllProducts() {
-        ArrayList<String> inner;
-        ArrayList<ArrayList<String>> outer = new ArrayList<>();
+    public ArrayList<Product> getAllProducts() {
+        ArrayList<Product> result = new ArrayList<>();
         try {
 
 
@@ -189,16 +188,14 @@ public class ProductRepoDB implements IProductRepo {
             ResultSet rs = selectAllStatement.executeQuery();
 
             while(rs.next()){
-                inner = new ArrayList<>();
-                for(int i = 1; i <= 4; i++)
-                {
-                    inner.add(rs.getString(i));
-                }
-                outer.add(inner);
+
+                Product product = new
+                        Product(rs.getInt("product_id"), rs.getString("name"), rs.getDouble("price"), rs.getString("description"));
+                result.add(product);
+
             }
 
-            return outer;
-
+            return result;
 
         }catch (Exception e){
             e.getMessage();

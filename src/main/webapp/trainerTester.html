@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        var heroes = [];
+
+        function getAllHeroes() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status > 199 && this.status < 300) {
+                    document.querySelectorAll("#heroTable tbody tr")
+                        .forEach(
+                            function(element) {
+                                element.remove();
+                            }
+                        );
+
+                    heroes = JSON.parse(this.responseText);
+                    let table = document.querySelector("#heroTable tbody");
+
+                    for (let i = 0; i < heroes.length; ++i) {
+                        let row = table.insertRow(table.rows.length);
+
+                        let nameCell = row.insertCell(0);
+                        nameCell.innerHTML = heroes[i].name;
+
+                        let aliveCell = row.insertCell(1);
+                        aliveCell.innerHTML = heroes[i].alive;
+                    }
+                }
+            };
+            xhttp.open("GET", "http://localhost:8080/TourOfHeroesREST/heroes/service/all", true);
+            xhttp.send();
+        }
+
+        function submitHero() {
+            let hero = {};
+            hero.name = document.querySelector("#inpName").value;
+            hero.healthLevel = document.querySelector("#inpHealth").value;
+            if (document.querySelector("#inpAlive").value == "on")
+                hero.alive = "true";
+            else
+                hero.alive = "false";
+            hero.specialMove = [];
+
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function() {
+                if (this.readyState > 3) {
+                    document.querySelector("#inpName").value = "";
+                    document.querySelector("#inpHealth").value = "";
+                    document.querySelector("#inpAlive").value = "off";
+                }
+            }
+
+            req.open("POST", "http://localhost:8080/TourOfHeroesREST/heroes/service", true);
+            req.setRequestHeader('Content-Type', 'application/json');
+            req.send(JSON.stringify(hero));
+        }
+    </script>
+</head>
+<body>
+<input type="button" onClick="getAllHeroes()" value="Get All Heroes"/>
+<table id="heroTable">
+    <thead>
+    <tr>
+        <td>Hero Name</td>
+        <td>Are they alive?</td>
+    </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>
+
+<br/> <br/>
+<input type="text" id="inpName" />
+<input type="text" id="inpHealth" />
+<input type="checkbox" id="inpAlive" />
+<input type="button" id="inpButton" value="Submit Hero" onClick="submitHero()"/>
+</body>
+</html>

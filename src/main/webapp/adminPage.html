@@ -15,6 +15,67 @@
 
 
     <title>Admin Page</title>
+
+    <script>
+
+        var products = [];
+
+        function getAllProducts() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status > 199 && this.status < 300) {
+                    document.querySelectorAll("#productTable tbody tr")
+                        .forEach(
+                            function(element) {
+                                element.remove();
+                            }
+                        );
+
+                    products = JSON.parse(this.responseText);
+                    let table = document.querySelector("#productTable tbody");
+
+                    for (let i = 0; i < products.length; ++i) {
+                        let row = table.insertRow(table.rows.length);
+
+                        let idCell = row.insertCell(0);
+                        idCell.innerHTML = products[i].product_id;
+
+                        let nameCell = row.insertCell(1);
+                        nameCell.innerHTML = products[i].name;
+
+                        let priceCell = row.insertCell(2);
+                        priceCell.innerHTML = products[i].price;
+
+                        let descriptionCell = row.insertCell(3);
+                        descriptionCell.innerHTML = products[i].description;
+                    }
+                }
+            };
+            xhttp.open("GET", "http://localhost:8080/OnlineStoreApp/service/products/all", true);
+            xhttp.send();
+        }
+
+        function submitProduct() {
+            let products = {};
+            products.name = document.querySelector("#name").value;
+            products.price = document.querySelector("#price").value;
+            products.description = document.querySelector("#description").value;
+
+
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function () {
+                if (this.readyState > 3) {
+                    document.querySelector("#name").innerHTML = "";
+                    document.querySelector("#price").innerHTML = "";
+                    document.querySelector("#description").innerHTML = "";
+                }
+            }
+
+            req.open("POST", "http://localhost:8080/OnlineStoreApp/service/products/newproduct/form", true);
+            req.setRequestHeader('Content-Type', 'application/json');
+            req.send(JSON.stringify(products));
+        }
+    </script>
 </head>
 <body>
 
@@ -36,6 +97,31 @@
 </nav>
 
 <h1>Login Success! In Admin Page</h1>
+<br>
+
+<input type="button" onClick="getAllProducts()" value="Get Current Products"/>
+<table id="productTable">
+    <thead>
+    <tr>
+        <td>Name</td>
+        <td>Price</td>
+        <td>Description</td>
+    </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>
+
+<br/> <br/>
+<h3>Add New Product</h3>
+
+<label>
+<input type="text" id="name" placeholder="Enter Product Name"/>
+<input type="number" id="price" placeholder="Enter Price"/>
+<input type="text" id="description" placeholder="Description"/>
+<input type="button" id="inpButton" value="Add Product" onClick="submitProduct()"/>
+</label>
 
 
 

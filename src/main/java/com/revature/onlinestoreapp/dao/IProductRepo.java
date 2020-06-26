@@ -12,7 +12,7 @@ public interface IProductRepo {
     public void addLineItem(int cartID, int productID, int quantity);
     public void totalOrder();
 
-    public ArrayList<ArrayList<String>> getAllProducts();
+    public ArrayList<Product> getAllProducts();
 
 
 }
