@@ -13,17 +13,17 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css">
     <link rel="stylesheet" href="bootstrap/css/mystyle.css">
 
-    <title>Create Account Customer</title>
+    <title>Create Account Admin</title>
 
     <script>
 
-        function createNewCustomer() {
-            let customer = {};
+        function createNewAdmin() {
+            let admin = {};
 
-            customer.firstName = document.querySelector("#firstName").value;
-            customer.lastName = document.querySelector("#lastName").value;
-            customer.email = document.querySelector("#email").value;
-            customer.password = document.querySelector("#password").value;
+            admin.firstName = document.querySelector("#firstName").value;
+            admin.lastName = document.querySelector("#lastName").value;
+            admin.email = document.querySelector("#email").value;
+            admin.password = document.querySelector("#password").value;
 
 
 
@@ -39,9 +39,9 @@
                 }
             };
 
-            req.open("POST", "http://localhost:8080/OnlineStoreApp/service/user/newcustomer/form", true);
+            req.open("POST", "http://localhost:8080/OnlineStoreApp/service/user/newAdmin", true);
             req.setRequestHeader('Content-Type', 'application/json');
-            req.send(JSON.stringify(customer));
+            req.send(JSON.stringify(admin));
         }
     </script>
 </head>
@@ -64,7 +64,12 @@
                     </div>
                     <input type="email" id="email" class="form-control mb-4" placeholder="Email" required="required">
                     <input class="form-control" type="password" id="password" placeholder="Password" required="required">
-                    <input type="submit" class="btn btn-success" id="inputButton" value="Submit" onclick="createNewCustomer()"/>
+                    <input type="submit" class="btn btn-success" id="inputButton" value="Submit" onclick="createNewAdmin()"/>
+
+                    <div class="col-12 create">
+                        <span><a href="adminLogin.html">Back to Admin Login</a></span>
+                    </div>
+
                 </form>
             </div>
         </div>

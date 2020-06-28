@@ -14,8 +14,12 @@ import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.apache.log4j.Logger;
+
 @Path("/Login")
 public class LoginService {
+
+    private static final Logger logger = Logger.getLogger(LoginService.class);
 
     @POST
     @Path("/customer")
@@ -32,6 +36,7 @@ public class LoginService {
             System.out.println("Customer Login works REST");
 
             //return Response.temporaryRedirect(uri).build();
+            logger.info("Customer " + customer.getEmail() + " logged in.");
             return Response.status(304).build();
         }
         else {
@@ -57,9 +62,13 @@ public class LoginService {
             URI uri = UriBuilder.fromUri("../adminPage.html").build();
             System.out.println("Admin Login works REST");
 
+            logger.info("Admin " + admin.getEmail() + " logged in");
+
             return Response.temporaryRedirect(uri).build();
         }
         else {
+
+            logger.error("Admin failed to log in");
 
             System.out.println("Wrong email and Password");
 

@@ -11,16 +11,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import com.sun.org.apache.xpath.internal.operations.Or;
-import org.apache.log4j.Logger;
-
-import javax.sound.sampled.Line;
 
 public class ProductRepoDB implements IProductRepo {
 
 
     private ConnectionService connectionService = ConnectionService.getInstance();
-    final static Logger logger = Logger.getLogger(ProductRepoDB.class);
 
     public ProductRepoDB(){
 
@@ -43,13 +38,11 @@ public class ProductRepoDB implements IProductRepo {
             addProductStatement.executeUpdate();
 
 
-            logger.info("New product added: " + product);
             return product;
 
         }catch (SQLException e){
 
             System.out.println("Exception " + e.getMessage());
-            logger.error("Failed to add product: " + product);
             e.printStackTrace();
         }
 
@@ -148,6 +141,36 @@ public class ProductRepoDB implements IProductRepo {
         return null;
 
     }
+
+    @Override
+    public ArrayList<Cart> getCartInfo(int customer_id) {
+
+        ArrayList<Cart> result = new ArrayList<>();
+        try {
+
+
+            PreparedStatement selectAllStatement =
+                    connectionService.getConnection().prepareStatement("SELECT * FROM cart WHERE customer_id = " + "'" + customer_id + "'");
+
+            ResultSet rs = selectAllStatement.executeQuery();
+
+            while(rs.next()){
+
+                Cart cart = new
+                        Cart(rs.getInt("cart_id"), rs.getInt("customer_id"));
+                result.add(cart);
+
+            }
+
+            return result;
+
+        }catch (Exception e){
+            e.getMessage();
+        }
+
+        return null;
+    }
+
 
     @Override
     public ArrayList<OrderTotal> totalOrder() {

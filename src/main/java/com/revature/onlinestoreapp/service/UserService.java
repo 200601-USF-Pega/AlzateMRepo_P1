@@ -3,8 +3,10 @@ package com.revature.onlinestoreapp.service;
 
 import com.revature.onlinestoreapp.dao.IUserRepo;
 import com.revature.onlinestoreapp.dao.UserRepoDB;
+import com.revature.onlinestoreapp.models.Admin;
 import com.revature.onlinestoreapp.models.Customer;
 import com.revature.onlinestoreapp.models.PaymentInfo;
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.ws.rs.*;
@@ -17,6 +19,8 @@ import java.util.ArrayList;
 
 @Path("/user")
 public class UserService {
+
+    private static final Logger logger = Logger.getLogger(LoginService.class);
 
     IUserRepo userRepo = new UserRepoDB();
 
@@ -32,14 +36,29 @@ public class UserService {
 
         System.out.println(customer.toString());
 
+        logger.info("New customer " + customer.getEmail() + " created successfully");
+
         return Response.temporaryRedirect(uri).build();
     }
 
+    @POST
+    @Path("/newAdmin")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addNewAdmin(Admin admin) throws IOException {
+
+        UserRepoDB userRepoDB = new UserRepoDB();
+        URI uri = UriBuilder.fromUri("../adminLogin.html").build();
+
+        userRepoDB.addAdmin(admin);
+
+        System.out.println(admin.toString());
+
+        logger.info("New admin " + admin.getEmail() + " created successfully");
+
+        return Response.temporaryRedirect(uri).build();
 
 
-
-
-
+    }
 
 
 }

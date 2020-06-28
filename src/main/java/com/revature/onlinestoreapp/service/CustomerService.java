@@ -30,11 +30,8 @@ public class CustomerService {
             System.out.println(customer.toString());
         }
 
-
-
         return Response.ok((ArrayList<Customer>)customerRepo.getCustomerInfo(email)).build();
     }
-
 
 
 }

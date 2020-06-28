@@ -14,6 +14,7 @@ public interface IProductRepo {
     public Cart enterCart(Cart cart);
     public LineItems addLineItem(LineItems items);
 
+    public ArrayList<Cart> getCartInfo(int customer_id);
     public ArrayList<OrderTotal> totalOrder();
     public ArrayList<Product> getAllProducts();
 
