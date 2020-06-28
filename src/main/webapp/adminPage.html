@@ -69,7 +69,7 @@
                     document.querySelector("#price").innerHTML = "";
                     document.querySelector("#description").innerHTML = "";
                 }
-            }
+            };
 
             req.open("POST", "http://localhost:8080/OnlineStoreApp/service/products/newproduct/form", true);
             req.setRequestHeader('Content-Type', 'application/json');
@@ -77,6 +77,8 @@
         }
 
         function removeProduct(){
+
+            console.log("Remove Product");
 
             let product = {};
             product = document.querySelector("#product_id").value;
@@ -88,7 +90,7 @@
 
                     document.querySelector("#product_id").value = "";
                 }
-            }
+            };
 
             req.open("DELETE","http://localhost:8080/OnlineStoreApp/service/products/removeProduct", true);
             req.setRequestHeader('Content-Type', 'application/json');
@@ -122,6 +124,7 @@
 <table id="productTable">
     <thead>
     <tr>
+        <td>ID</td>
         <td>Name</td>
         <td>Price</td>
         <td>Description</td>

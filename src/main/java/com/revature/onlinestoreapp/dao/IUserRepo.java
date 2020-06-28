@@ -7,8 +7,8 @@ import com.revature.onlinestoreapp.models.PaymentInfo;
 
 public interface IUserRepo {
 
-    public Customer addCustomer(Customer customer, PaymentInfo paymentInfo);
+    public Customer addCustomer(Customer customer);
     public Admin addAdmin(Admin admin);
 
-    public ArrayList<Customer> getAllCustomers();
+    public ArrayList<Customer> getCustomerInfo(String email);
 }

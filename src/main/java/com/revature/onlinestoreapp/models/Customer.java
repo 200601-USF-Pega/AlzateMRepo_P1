@@ -2,26 +2,19 @@ package com.revature.onlinestoreapp.models;
 
 import java.io.Serializable;
 
-public class Customer implements Serializable {
+public class Customer {
 
-    private int customerID; //This is the generated primary key
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String password;
-    private String street;
-    private String city;
-    private String state;
-    private String zipCode;
-    private String phoneNum;
-    private String userType = "Customer";
-
-    /*
-        No args constructor
-     */
-    public Customer(){
-
-    }
+    int customer_id;
+    String firstName;
+    String lastName;
+    String email;
+    String password;
+    String street;
+    String city;
+    String state;
+    String zipCode;
+    String phoneNum;
+    String userType = "Customer";
 
 
     /*
@@ -34,32 +27,31 @@ public class Customer implements Serializable {
         this.password = password;
     }
 
-    /*
-    This will be used on P1, I will use this to differ the carts from each customer better
-     */
-    public Customer(int customerID, String firstName, String lastName, String street, String city, String state, String zipCode, String phoneNum) {
-        this.customerID = customerID;
+
+    public Customer(String firstName, String lastName) {
+        this.customer_id = 0;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.street = street;
-        this.city = city;
-        this.state = state;
-        this.zipCode = zipCode;
-        this.phoneNum = phoneNum;
     }
 
-    public Customer(String firstName, String lastName, String email) {
-        this.firstName = firstName;
+
+    public Customer(int customer_id, String firsName, String lastName) {
+        this.customer_id = customer_id;
+        this.firstName = firsName;
         this.lastName = lastName;
-        this.email = email;
     }
+
+    public Customer(){
+
+    }
+
 
     public int getCustomerID() {
-        return customerID;
+        return customer_id;
     }
 
-    public void setCustomerID(int customerID) {
-        this.customerID = customerID;
+    public void setCustomerID(int customer_id) {
+        this.customer_id = customer_id;
     }
 
     public String getFirstName() {
@@ -100,11 +92,10 @@ public class Customer implements Serializable {
 
     @Override
     public String toString() {
-        return "Customer " +
-                "firstName='" + firstName + '\'' +
+        return "Customer{" +
+                "customer_id=" + customer_id +
+                ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
                 '}';
     }
 }

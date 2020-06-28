@@ -15,6 +15,163 @@
 
 
     <title>Customer Page</title>
+
+    <script>
+        var products = [];
+        var customerInfo = [];
+
+
+        function getAllProducts() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status > 199 && this.status < 300) {
+                    document.querySelectorAll("#productTable tbody tr")
+                        .forEach(
+                            function(element) {
+                                element.remove();
+                            }
+                        );
+
+                    products = JSON.parse(this.responseText);
+                    let table = document.querySelector("#productTable tbody");
+
+                    for (let i = 0; i < products.length; ++i) {
+                        let row = table.insertRow(table.rows.length);
+
+                        let idCell = row.insertCell(0);
+                        idCell.innerHTML = products[i].product_id;
+
+                        let nameCell = row.insertCell(1);
+                        nameCell.innerHTML = products[i].name;
+
+                        let priceCell = row.insertCell(2);
+                        priceCell.innerHTML = products[i].price;
+
+                        let descriptionCell = row.insertCell(3);
+                        descriptionCell.innerHTML = products[i].description;
+                    }
+                }
+            };
+            xhttp.open("GET", "http://localhost:8080/OnlineStoreApp/service/products/all", true);
+            xhttp.send();
+        }
+
+        function displayCustomerInformation(){
+
+
+            var email = sessionStorage.getItem("email");
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status > 199 && this.status < 300) {
+                    document.querySelectorAll("#customerInfoTable tbody tr")
+                        .forEach(
+                            function(element) {
+                                element.remove();
+                            }
+                        );
+
+                    customerInfo = JSON.parse(this.responseText);
+                    let table = document.querySelector("#customerInfoTable tbody");
+
+                    for (let i = 0; i < customerInfo.length; ++i) {
+                        let row = table.insertRow(table.rows.length);
+
+                        let idCell = row.insertCell(0);
+                        idCell.innerHTML = customerInfo[0].customer_id;
+                        //console.log(customerInfo.length);
+
+                        let firstNameCell = row.insertCell(1);
+                        firstNameCell.innerHTML = customerInfo[0].firstName;
+
+                        let lastNameCell = row.insertCell(2);
+                        lastNameCell.innerHTML = customerInfo[0].lastName;
+
+                    }
+                }
+
+            };
+            xhttp.open("GET", "http://localhost:8080/OnlineStoreApp/service/CustomerService/"+email+"/info", true);
+            xhttp.send();
+
+        }
+
+        function addCart() {
+
+            let cart = {};
+            cart.customer_id = document.querySelector("#customer_id").value;
+
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function () {
+                if (this.readyState > 3) {
+                    document.querySelector("#customer_id").innerHTML = "";
+
+                }
+            };
+
+            //fix the link to the service to add to the cart
+            req.open("POST", "http://localhost:8080/OnlineStoreApp/service/products/addCart/form", true);
+            req.setRequestHeader('Content-Type', 'application/json');
+            req.send(JSON.stringify(cart));
+        }
+
+        function addLineItems() {
+
+            let lineItems = {};
+            lineItems.cart_id = document.querySelector("#cart_id").value;
+            lineItems.product_id = document.querySelector("#product_id").value;
+            lineItems.quantity = document.querySelector("#quantity").value;
+
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function () {
+                if (this.readyState > 3) {
+                    document.querySelector("#cart_id").innerHTML = "";
+                    document.querySelector("#product_id").innerHTML = "";
+                    document.querySelector("#quantity").innerHTML = "";
+
+                }
+            };
+
+            //fix the link to the service to add to the cart
+            req.open("POST", "http://localhost:8080/OnlineStoreApp/service/products/lineItems/add", true);
+            req.setRequestHeader('Content-Type', 'application/json');
+            req.send(JSON.stringify(lineItems));
+        }
+
+        var orderTotal = [];
+
+        function displayTotalOrder() {
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status > 199 && this.status < 300) {
+                    document.querySelectorAll("#orderTotalTable tbody tr")
+                        .forEach(
+                            function(element) {
+                                element.remove();
+                            }
+                        );
+
+                    orderTotal = JSON.parse(this.responseText);
+                    let table = document.querySelector("#orderTotalTable tbody");
+
+                    for (let i = 0; i < orderTotal.length; ++i) {
+                        let row = table.insertRow(table.rows.length);
+
+                        let totalPriceCell = row.insertCell(0);
+                        totalPriceCell.innerHTML = orderTotal[i].total;
+
+
+                    }
+                }
+            };
+            xhttp.open("GET", "http://localhost:8080/OnlineStoreApp/service/products/orderTotal", true);
+            xhttp.send();
+        }
+
+    </script>
+
+
 </head>
 <body>
 
@@ -36,6 +193,75 @@
 </nav>
 
 <h1>Login Success! In Customer Page</h1>
+<br>
+<input type="button" onClick="displayCustomerInformation()" value="Display Customer Info"/>
+<table id="customerInfoTable">
+    <thead>
+    <tr>
+        <td>ID</td>
+        <td>First Name</td>
+        <td>Last Name</td>
+    </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>
+
+
+<br>
+<input type="button" onClick="getAllProducts()" value="Get Current Products"/>
+<table id="productTable">
+    <thead>
+    <tr>
+        <td>ID</td>
+        <td>Name</td>
+        <td>Price</td>
+        <td>Description</td>
+    </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>
+
+<br/> <br/>
+
+<div>
+    <h3>Add Item to Cart</h3>
+
+    <label>
+        <input type="number" id="customer_id" placeholder="Enter Customer ID"/>
+        <input type="button" id="cartButton" value="Add to Cart" onClick="addCart()"/>
+    </label>
+
+    <h3>Add to Line Items</h3>
+
+    <label>
+        <input type="number" id="cart_id" placeholder="Enter Cart ID"/>
+        <input type="number" id="product_id" placeholder="Enter Product ID"/>
+        <input type="number" id="quantity" placeholder="Enter Quantity"/>
+
+        <input type="button" id="lineItemButton" value="Add Line Items" onClick="addLineItems()"/>
+    </label>
+
+    <h3>Complete Purchase</h3>
+    <label>
+        <input type="button" id="completePurchaseButton" value="Complete Purchase" onClick="displayTotalOrder()"/>
+    </label>
+
+    <table id="orderTotalTable">
+        <thead>
+        <tr>
+            <td>Total Price: </td>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+</div>
 
 
 

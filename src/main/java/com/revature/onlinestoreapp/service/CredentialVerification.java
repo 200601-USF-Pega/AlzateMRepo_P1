@@ -113,7 +113,7 @@ public class CredentialVerification {
 
     /**
      *  New login verification for project 1. Gets both email and password at the same time.
-     * @param customer customer object
+     * @param customer object
      * @return boolean value depending on input
      */
     public boolean loginCustomer(Customer customer){

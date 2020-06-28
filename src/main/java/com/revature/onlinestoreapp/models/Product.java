@@ -15,12 +15,15 @@ public class Product {
         this.description = description;
     }
 
+
     public Product(int product_id, String name, double price, String description) {
         this.product_id = product_id;
         this.name = name;
         this.price = price;
         this.description = description;
     }
+
+
 
     public Product() {
     }
@@ -47,10 +50,6 @@ public class Product {
 
     public double getPrice() {
         return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
     }
 
     public String getDescription() {

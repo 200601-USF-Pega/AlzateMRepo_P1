@@ -2,14 +2,16 @@ package com.revature.onlinestoreapp.service;
 
 import com.revature.onlinestoreapp.dao.IProductRepo;
 import com.revature.onlinestoreapp.dao.ProductRepoDB;
+import com.revature.onlinestoreapp.models.Cart;
+import com.revature.onlinestoreapp.models.LineItems;
 import com.revature.onlinestoreapp.models.Product;
-import com.sun.jersey.multipart.FormDataParam;
+import com.revature.onlinestoreapp.models.Customer;
 
+import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 @Path("/products")
@@ -26,11 +28,14 @@ public class ProductService {
         ProductRepoDB productRepoDB = new ProductRepoDB();
 
         productRepoDB.addProduct(product);
-        System.out.println(product.toString());
+        //System.out.println(product.toString());
 
 
         return Response.ok().status(201).build();
     }
+
+
+
 
     @DELETE
     @Path("/removeProduct")
@@ -45,6 +50,43 @@ public class ProductService {
 
     }
 
+    @POST
+    @Path("/addCart/form")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addCart(Cart cart) throws IOException {
+
+
+        ProductRepoDB productRepoDB = new ProductRepoDB();
+
+        productRepoDB.enterCart(cart);
+
+        return Response.ok().status(201).build();
+    }
+
+
+    @POST
+    @Path("/lineItems/add")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addLineItems(LineItems items) throws IOException {
+
+
+        ProductRepoDB productRepoDB = new ProductRepoDB();
+
+        productRepoDB.addLineItem(items);
+
+
+        return Response.ok().status(201).build();
+    }
+
+    @GET
+    @Path("/orderTotal")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getOrderTotal() {
+
+        //System.out.println(productRepo.totalOrder());
+
+        return Response.ok(productRepo.totalOrder()).build();
+    }
 
 
 

@@ -1,5 +1,8 @@
 package com.revature.onlinestoreapp.dao;
 
+import com.revature.onlinestoreapp.models.Cart;
+import com.revature.onlinestoreapp.models.LineItems;
+import com.revature.onlinestoreapp.models.OrderTotal;
 import com.revature.onlinestoreapp.models.Product;
 import com.revature.onlinestoreapp.web.ConnectionService;
 
@@ -8,10 +11,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.sun.org.apache.xpath.internal.operations.Or;
+import org.apache.log4j.Logger;
+
+import javax.sound.sampled.Line;
+
 public class ProductRepoDB implements IProductRepo {
 
 
     private ConnectionService connectionService = ConnectionService.getInstance();
+    final static Logger logger = Logger.getLogger(ProductRepoDB.class);
 
     public ProductRepoDB(){
 
@@ -34,11 +43,13 @@ public class ProductRepoDB implements IProductRepo {
             addProductStatement.executeUpdate();
 
 
+            logger.info("New product added: " + product);
             return product;
 
         }catch (SQLException e){
 
             System.out.println("Exception " + e.getMessage());
+            logger.error("Failed to add product: " + product);
             e.printStackTrace();
         }
 
@@ -75,36 +86,28 @@ public class ProductRepoDB implements IProductRepo {
     }
 
     @Override
-    public void enterCart(int customerID) {
+    public Cart enterCart(Cart cart) {
+
+        ResultSet rs = null;
 
         try{
 
             PreparedStatement enterCartStatement =
                     connectionService.getConnection().prepareStatement("INSERT INTO cart (customer_id) VALUES (?)");
 
-            enterCartStatement.setInt(1, customerID);
+            enterCartStatement.setInt(1, cart.getCustomer_id());
 
 
             enterCartStatement.executeUpdate();
+            System.out.println("Cart added to DB");
 
-            PreparedStatement selectFromCart =
-                    connectionService.getConnection().prepareStatement("SELECT * FROM cart WHERE customer_id =" + "'" + customerID + "'");
-
-            ResultSet resultSet = selectFromCart.executeQuery();
-
-            if (resultSet.next()) {
-
-
-
-                int cartID = resultSet.getInt(1);
-
-                System.out.println("Cart ID: " + cartID);
-
-
-
-            } else {
-                System.out.println("Fail");
+            rs = enterCartStatement.getGeneratedKeys();
+            if(rs != null && rs.next()){
+                System.out.println("Generated Key: " + rs.getInt(1));
             }
+
+            return cart;
+
 
 
         }catch (SQLException e){
@@ -113,21 +116,27 @@ public class ProductRepoDB implements IProductRepo {
             e.printStackTrace();
         }
 
+        return null;
+
     }
 
     @Override
-    public void addLineItem(int cartID, int productID, int quantity){
+    public LineItems addLineItem(LineItems items){
 
         try{
 
             PreparedStatement addLineItemStatement =
                     connectionService.getConnection().prepareStatement("INSERT INTO LineItems (cart_id, product_id, quantity) VALUES (?, ?, ?)");
 
-            addLineItemStatement.setInt(1, cartID);
-            addLineItemStatement.setInt(2, productID);
-            addLineItemStatement.setInt(3, quantity);
+            addLineItemStatement.setInt(1, items.getCart_id());
+            addLineItemStatement.setInt(2, items.getProduct_id());
+            addLineItemStatement.setInt(3, items.getQuantity());
 
             addLineItemStatement.executeUpdate();
+
+            System.out.println("Line Items added successfully");
+
+            return items;
 
 
         }catch (SQLException e){
@@ -136,11 +145,13 @@ public class ProductRepoDB implements IProductRepo {
             e.printStackTrace();
         }
 
+        return null;
 
     }
 
     @Override
-    public void totalOrder() {
+    public ArrayList<OrderTotal> totalOrder() {
+        ArrayList<OrderTotal> result = new ArrayList<>();
 
         try {
 
@@ -155,25 +166,24 @@ public class ProductRepoDB implements IProductRepo {
             ResultSet resultSet = totalOrder.executeQuery();
 
 
-            if (resultSet.next()) {
+            while(resultSet.next()) {
 
-                //int customer_id = resultSet.getInt("customer_id");
-                //String email = resultSet.getString("email");
-
-                double total = resultSet.getDouble("total");
-
-                System.out.println("Total Price: " + total);
+                //double total = resultSet.getDouble("total");
+                //System.out.println("Total Price: " + total);
+                OrderTotal orderTotal = new OrderTotal(resultSet.getDouble("total"));
+                result.add(orderTotal);
 
 
-            } else {
-                System.out.println("Fail");
             }
+            return result;
 
         } catch (SQLException e) {
             System.out.println("Input does not match");
 
             e.getMessage();
         }
+
+        return null;
 
     }
 
@@ -183,7 +193,8 @@ public class ProductRepoDB implements IProductRepo {
         try {
 
 
-            PreparedStatement selectAllStatement = connectionService.getConnection().prepareStatement("SELECT * FROM products");
+            PreparedStatement selectAllStatement =
+                    connectionService.getConnection().prepareStatement("SELECT * FROM products");
 
             ResultSet rs = selectAllStatement.executeQuery();
 

@@ -3,9 +3,12 @@ package com.revature.onlinestoreapp.service;
 import com.revature.onlinestoreapp.models.Admin;
 import com.revature.onlinestoreapp.models.Customer;
 
+import javax.print.attribute.standard.Media;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
@@ -16,19 +19,20 @@ public class LoginService {
 
     @POST
     @Path("/customer")
-    public Response customerLogin(@FormParam("email") String email, @FormParam("password") String password) throws URISyntaxException {
-        Customer customer = new Customer();
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response customerLogin(Customer customer) throws URISyntaxException {
         CredentialVerification credentialVerification = new CredentialVerification();
 
-        customer.setEmail(email);
-        customer.setPassword(password);
+        //customer.setEmail(email);
+        //customer.setPassword(password);
 
         if(credentialVerification.loginCustomer(customer)){
 
             URI uri = UriBuilder.fromUri("../customerPage.html").build();
             System.out.println("Customer Login works REST");
 
-            return Response.temporaryRedirect(uri).build();
+            //return Response.temporaryRedirect(uri).build();
+            return Response.status(304).build();
         }
         else {
 
